@@ -57,7 +57,7 @@ public class PlayerInput : MonoBehaviour {
     IEnumerator RecoilCorountine(float intensity)
     {
         float recoilTime = 0;
-        float totalRecoilTime = 0.05f;
+        float totalRecoilTime = 0.08f;
 
         Vector2 recoilVector = new Vector2(Random.Range(-1 * intensity, intensity), Random.Range(-1 * intensity, intensity));
 
