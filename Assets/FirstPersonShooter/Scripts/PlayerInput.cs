@@ -21,12 +21,6 @@ public class PlayerInput : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        //rotação do personagem
-        transform.Rotate(0, Input.GetAxis("Mouse X") * mouseSensibility, 0);
-
-        //controle vertical da câmera
-        head.Rotate(-1 * Input.GetAxis("Mouse Y") * mouseSensibility, 0, 0);
-
         //movimento do personagem 
         Vector3 forward = transform.TransformDirection(Vector3.forward);
         float forwardSpeed = speed * Input.GetAxis("Vertical");
@@ -34,9 +28,16 @@ public class PlayerInput : MonoBehaviour {
         float rightSpeed = speed * Input.GetAxis("Horizontal");
         characterController.SimpleMove(forward * forwardSpeed + right * rightSpeed);
 
+        //rotação do personagem
+        transform.Rotate(0, Input.GetAxis("Mouse X") * mouseSensibility, 0);
+
+        //controle vertical da câmera
+        head.Rotate(-1 * Input.GetAxis("Mouse Y") * mouseSensibility, 0, 0);
+
+
 
         //atirar
-        if(Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire1"))
         {
             //faz um raycast para encontrar o que o tiro vai atingir (como
             //se o raio partisse do centro da tela
@@ -48,9 +49,11 @@ public class PlayerInput : MonoBehaviour {
                 //hitInfo contem informação sobre onde o tiro atingiu
 
                 //vamos colocar o hiteffect na posição onde o tiro atingiu!
-                GameObject hitEffect = (GameObject) Instantiate(tiro.hitEffect, hitInfo.point, Quaternion.FromToRotation(Vector3.back, hitInfo.normal));
-                StartCoroutine(RecoilCorountine(tiro.recoil));
+                Quaternion rotation = Quaternion.FromToRotation(Vector3.back, hitInfo.normal);
+                GameObject hitEffect = (GameObject) Instantiate(tiro.hitEffect, hitInfo.point, rotation);
             }
+
+            StartCoroutine(RecoilCorountine(tiro.recoil));
         }
     }
 
