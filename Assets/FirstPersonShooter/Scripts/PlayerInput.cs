@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using System.Collections;
 
 [RequireComponent(typeof(CharacterController))]
-public class PlayerInput : MonoBehaviour {
+public class PlayerInput : NetworkBehaviour
+{
     private CharacterController characterController;
     private Transform head;
     private Camera playerViewCamera;
@@ -16,10 +18,22 @@ public class PlayerInput : MonoBehaviour {
         characterController = GetComponent<CharacterController>();
         head = transform.Find("Head");
         playerViewCamera = head.GetComponent<Camera>();
+
+        if (!isLocalPlayer)
+        {
+            Destroy(this);
+        } else
+        {
+            head.GetComponent<Camera>().enabled = true;
+            head.GetComponent<GUILayer>().enabled = true;
+            head.GetComponent<FlareLayer>().enabled = true;
+            head.GetComponent<AudioListener>().enabled = true;
+        }
+
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update () {
 
         //movimento do personagem 
         Vector3 forward = transform.TransformDirection(Vector3.forward);
