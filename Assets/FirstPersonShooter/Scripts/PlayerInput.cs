@@ -19,21 +19,24 @@ public class PlayerInput : NetworkBehaviour
         head = transform.Find("Head");
         playerViewCamera = head.GetComponent<Camera>();
 
-        if (!isLocalPlayer)
-        {
-            Destroy(this);
-        } else
+        if(isLocalPlayer)
         {
             head.GetComponent<Camera>().enabled = true;
             head.GetComponent<GUILayer>().enabled = true;
             head.GetComponent<FlareLayer>().enabled = true;
             head.GetComponent<AudioListener>().enabled = true;
         }
-
     }
+
+
 
     // Update is called once per frame
     void Update () {
+        if(!isLocalPlayer)
+        {
+            return;
+        }
+
 
         //movimento do personagem 
         Vector3 forward = transform.TransformDirection(Vector3.forward);
@@ -47,8 +50,6 @@ public class PlayerInput : NetworkBehaviour
 
         //controle vertical da câmera
         head.Rotate(-1 * Input.GetAxis("Mouse Y") * mouseSensibility, 0, 0);
-
-
 
         //atirar
         if (Input.GetButtonDown("Fire1"))
@@ -64,11 +65,19 @@ public class PlayerInput : NetworkBehaviour
 
                 //vamos colocar o hiteffect na posição onde o tiro atingiu!
                 Quaternion rotation = Quaternion.FromToRotation(Vector3.back, hitInfo.normal);
-                GameObject hitEffect = (GameObject) Instantiate(tiro.hitEffect, hitInfo.point, rotation);
+                CmdSpawnHitEffect(hitInfo.point, rotation);
             }
 
             StartCoroutine(RecoilCorountine(tiro.recoil));
         }
+    }
+
+    [Command]
+    void CmdSpawnHitEffect(Vector3 position, Quaternion rotation)
+    {
+        
+        GameObject hitEffect = (GameObject)Instantiate(tiro.hitEffect, position, rotation);
+        NetworkServer.Spawn(hitEffect);
     }
 
     IEnumerator RecoilCorountine(float intensity)

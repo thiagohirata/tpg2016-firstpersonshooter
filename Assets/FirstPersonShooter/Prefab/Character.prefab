@@ -299,6 +299,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 3
   mouseSensibility: 3
+  tiroPrefab: {fileID: 131160, guid: 4caf1b55b7a1f8a4cb460b8119719b0d, type: 2}
   tiro: {fileID: 11400000, guid: bb220bb37db85a343bf9140b84f25e1b, type: 2}
 --- !u!114 &11483476
 MonoBehaviour:
